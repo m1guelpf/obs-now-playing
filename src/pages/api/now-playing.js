@@ -21,13 +21,14 @@ export default async function ({ query: { id } }, res) {
 
 		res.json({
 			is_playing: response.is_playing,
-			progress: response.progress_ms / response.item.duration_ms,
-			title: response.item.name,
-			artist: response.item.artists.map(artist => artist.name).join(', '),
+			progress: response.progress_ms / response.item?.duration_ms,
+			title: response.item?.name,
+			artist: response.item?.artists?.map(artist => artist.name)?.join(', '),
 			album: response.item?.album?.name,
-			cover_image: response.item?.album?.images?.filter(img => img.width)?.[0]?.url,
+			cover_image: response?.item?.album?.images?.filter(img => img.width)?.[0]?.url,
 		})
 	} catch (error) {
+		console.log(error)
 		if (error.response.status === 401) return res.status(401).json({ error: 'Token Expired' })
 
 		throw error

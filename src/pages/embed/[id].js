@@ -6,7 +6,7 @@ const Embed = () => {
 	const router = useRouter()
 	const { id } = router.query
 
-	const { data, error, revalidate } = useSWR(
+	const { data, revalidate } = useSWR(
 		() => `/api/now-playing?id=${id}`,
 		url => axios.get(url).then(res => res.data),
 		{
@@ -32,8 +32,10 @@ const Embed = () => {
 		}
 	)
 
+	if (!data.is_playing) return null
+
 	return (
-		<div className="min-h-screen flex items-center justify-end p-5">
+		<div className="flex items-center justify-end p-5">
 			<div className="relative inline-flex flex-col overflow-hidden text-white border border-white border-opacity-20 rounded-lg shadow">
 				<div className="inline-flex items-center py-2 pl-2 pr-4">
 					<div class="absolute bg-center filter blur-sm bg-cover inset-0 w-full h-full z-[-1]" style={{ background: `linear-gradient(to right, rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.2) 50%), url(${data.cover_image})` }}></div>
