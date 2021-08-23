@@ -1,3 +1,4 @@
+import { Transition } from '@headlessui/react'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
@@ -32,22 +33,22 @@ const Embed = () => {
 		}
 	)
 
-	if (!data.is_playing) return null
-
 	return (
-		<div className="flex items-center justify-end p-5">
-			<div className="relative inline-flex flex-col overflow-hidden text-white border border-white border-opacity-20 rounded-lg shadow">
-				<div className="inline-flex items-center py-2 pl-2 pr-4">
-					<div class="absolute bg-center filter blur-sm bg-cover inset-0 w-full h-full z-[-1]" style={{ background: `linear-gradient(to right, rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.2) 50%), url(${data.cover_image})` }}></div>
-					{data?.cover_image && <img className="rounded-lg w-24 h-24 mr-4" src={data.cover_image} />}
-					<div>
-						<h1 className="text-2xl mb-1">{data.title}</h1>
-						<h2 className="text-gray-100 text-lg">{data.artist}</h2>
+		<Transition show={data.is_playing} appear={true} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0">
+			<div className="flex items-center justify-end p-5">
+				<div className="relative inline-flex flex-col overflow-hidden text-white border border-white border-opacity-20 rounded-lg shadow">
+					<div className="inline-flex items-center py-2 pl-2 pr-4">
+						<div class="absolute bg-center filter blur-sm bg-cover inset-0 w-full h-full z-[-1]" style={{ background: `linear-gradient(to right, rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.2) 50%), url(${data.cover_image})` }}></div>
+						{data?.cover_image && <img className="rounded-lg w-24 h-24 mr-4" src={data.cover_image} />}
+						<div>
+							<h1 className="text-2xl mb-1">{data.title}</h1>
+							<h2 className="text-gray-100 text-lg">{data.artist}</h2>
+						</div>
 					</div>
+					<div className="max-w-full h-1 bg-[#1cd861]" style={{ width: `${data.progress * 100}%`, transition: 'width 1s linear' }} />
 				</div>
-				<div className="max-w-full h-1 bg-[#1cd861]" style={{ width: `${data.progress * 100}%`, transition: 'width 1s linear' }} />
 			</div>
-		</div>
+		</Transition>
 	)
 }
 
